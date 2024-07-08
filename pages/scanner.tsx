@@ -1,22 +1,34 @@
-import React, { useState } from "react";
-import { Text, View } from "react-native";
-import BarCodeScanner from "expo-barcode-scanner";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import React, { useEffect, useState } from "react";
+import { Button, Text, View } from "react-native";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
 export default function ScannerScreen() {
-  const [hasPermission, setHasPermission] = useState(false);
-  const [data, setData] = useState();
+  const [permission, requestPermission] = useCameraPermissions();
 
-  async function ensurePermission() {
-    const { status } = await BarCodeScanner.getPermissionsAsync();
-    setHasPermission(status === "granted");
+  if (!permission) {
+    return <View />;
   }
 
-  if (!hasPermission)
-    return <Text className="text-white">Please Grant Camera Permission</Text>;
+  if (!permission.granted) {
+    return (
+      <View>
+        <Text style={{ textAlign: "center" }}>
+          We need your permission to show the camera
+        </Text>
+        <TouchableHighlight
+          onPress={requestPermission}
+          className="bg-blue-700 px-8 py-2 rounded-md"
+        >
+          grant permission
+        </TouchableHighlight>
+      </View>
+    );
+  }
 
   return (
     <View>
-      <BarCodeScanner onBarCodeScanned={data ? undefined : () => {}} />
+      <CameraView facing={"back"} className="w-full aspect-square"></CameraView>
     </View>
   );
 }
