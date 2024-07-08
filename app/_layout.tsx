@@ -1,12 +1,13 @@
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "react-native-reanimated";
 
-import { NativeWindStyleSheet } from "nativewind";
 import App from "@/App";
-import { Text } from "react-native";
 import { GlobalContextProvider } from "@/contexts/Global";
+import { WebSocketProvider } from "@/contexts/WebSocket";
+import { NativeWindStyleSheet } from "nativewind";
+import { Text } from "react-native";
 
 NativeWindStyleSheet.setOutput({
   default: "native",
@@ -32,7 +33,9 @@ export default function RootLayout() {
 
   return (
     <GlobalContextProvider>
-      <App />
+      <WebSocketProvider>
+        <App />
+      </WebSocketProvider>
     </GlobalContextProvider>
   );
 }
