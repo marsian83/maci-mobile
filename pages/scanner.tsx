@@ -1,12 +1,19 @@
+import { useGlobalContext } from "@/contexts/Global";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import React, { useEffect, useState } from "react";
 import { Button, Text, Vibration, View } from "react-native";
-import { TouchableHighlight } from "react-native-gesture-handler";
+import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
 
 export default function ScannerScreen() {
   const [permission, requestPermission] = useCameraPermissions();
 
   const [data, setData] = useState<string | null>(null);
+
+  const [modal, setModal] = useGlobalContext().modalState;
+
+  useEffect(() => {
+    data && setModal(<VoteConfirmationModal id={data} />);
+  }, [data]);
 
   if (!permission) {
     return <View />;
@@ -34,8 +41,6 @@ export default function ScannerScreen() {
         Scan QR Code
       </Text>
 
-      {data && <Text>{data}</Text>}
-
       {!data && (
         <CameraView
           facing={"back"}
@@ -54,6 +59,25 @@ export default function ScannerScreen() {
           </Text>
         </CameraView>
       )}
+    </View>
+  );
+}
+
+function VoteConfirmationModal(props: { id: string }) {
+  const [modal, setModal] = useGlobalContext().modalState;
+
+  return (
+    <View className="p-4 max-w-[80vw] max-h-[60vh]">
+      {/* <View
+        className="self-end text-white"
+        // onPress={() => setModal(false)}
+      >
+        X
+      </View> */}
+
+      <Text className="text-white">
+        Are you sure you want to vote for {props.id}?
+      </Text>
     </View>
   );
 }

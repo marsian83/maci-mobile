@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import Drawer from "@/common/Drawer";
 import { useGlobalContext } from "@/contexts/Global";
 
-export default function HomeScreen() {
+export default function HomeScreen(props: { showQRscanner: () => void }) {
   const [drawer, setDrawer] = useGlobalContext().drawerState;
 
   return (
@@ -43,7 +43,10 @@ export default function HomeScreen() {
         </Text>
 
         <View className="flex flex-row gap-x-5 mt-3">
-          <TouchableOpacity className="flex gap-x-2 flex-row mt-3 bg-blue-600 px-7 py-2 rounded-full">
+          <TouchableOpacity
+            className="flex gap-x-2 flex-row mt-3 bg-blue-600 px-7 py-2 rounded-full"
+            onPress={props.showQRscanner}
+          >
             <Image
               src="https://icons.veryicon.com/png/o/miscellaneous/excellent-residents/scan-qr-code-4.png"
               style={{ tintColor: "#fff" }}

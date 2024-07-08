@@ -7,9 +7,15 @@ import HomeScreen from "./home";
 import ScannerScreen from "./scanner";
 
 export default function Pages() {
+  const [currentTab, setCurrentTab] = useState(0);
+
+  function showQRscanner() {
+    setCurrentTab(2);
+  }
+
   const tabs = [
     {
-      element: <HomeScreen />,
+      element: <HomeScreen showQRscanner={showQRscanner} />,
       icon: "https://cdn2.iconfinder.com/data/icons/ui-kit-developer-glyphs/16/GlyphIcons-Home-512.png",
     },
     {
@@ -29,8 +35,6 @@ export default function Pages() {
       icon: "https://static-00.iconduck.com/assets.00/settings-icon-1964x2048-8nigtrtt.png",
     },
   ];
-
-  const [currentTab, setCurrentTab] = useState(0);
 
   return (
     <SafeAreaView>
