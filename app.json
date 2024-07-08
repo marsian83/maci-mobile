@@ -13,7 +13,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.zk-voting.key-manager-1",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to scan qr code from MACI website."
+      }
     },
     "android": {
       "permissions": ["android.permission.CAMERA"],
@@ -35,12 +39,20 @@
         {
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
-          "recordAudioAndroid": true
+          "recordAudioAndroid": false
         }
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "4011fde9-022a-4f8f-addb-77f5962854f0"
+      }
     }
   }
 }
