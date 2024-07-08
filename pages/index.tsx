@@ -1,18 +1,9 @@
 import React, { useState } from "react";
+import { Image, ScrollView, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { twMerge } from "tailwind-merge";
 import ExploreScreen from "./explore";
 import HomeScreen from "./home";
-import {
-  Button,
-  Image,
-  ScrollView,
-  Text,
-  TouchableHighlight,
-  TouchableHighlightBase,
-  TouchableNativeFeedback,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { twMerge } from "tailwind-merge";
 import ScannerScreen from "./scanner";
 
 export default function Pages() {
@@ -42,35 +33,37 @@ export default function Pages() {
   const [currentTab, setCurrentTab] = useState(0);
 
   return (
-    <View className="flex flex-col w-full">
-      <ScrollView className="h-[97vh] pt-10 px-3">
-        {tabs[currentTab].element}
-      </ScrollView>
+    <SafeAreaView>
+      <View className="flex h-full">
+        <ScrollView className="pt-10 px-3 flex-grow">
+          {tabs[currentTab].element}
+        </ScrollView>
 
-      <View className="flex flex-row text-2xl h-[3vh] border-t pt-2 px-2 border-white/20">
-        {tabs.map((tab, key) => (
-          <TouchableOpacity
-            className={twMerge(
-              "flex justify-center items-center h-[4vh]",
-              currentTab == key && "bg-blue-800 rounded-full"
-            )}
-            style={{ width: `${100 / tabs.length}%` }}
-            onPress={() => setCurrentTab(key)}
-            key={key}
-          >
-            <Image
-              src={tab.icon}
+        <View className=" flex-row text-2xl border-t pt-2 px-2 border-white/20">
+          {tabs.map((tab, key) => (
+            <TouchableOpacity
               className={twMerge(
-                "w-[4vw] aspect-square opacity-30",
-                currentTab == key && "opacity-100"
+                "flex justify-center items-center h-[4vh]",
+                currentTab == key && "bg-blue-800 rounded-full"
               )}
-              style={{
-                tintColor: "#fff",
-              }}
-            />
-          </TouchableOpacity>
-        ))}
+              style={{ width: `${100 / tabs.length}%` }}
+              onPress={() => setCurrentTab(key)}
+              key={key}
+            >
+              <Image
+                src={tab.icon}
+                className={twMerge(
+                  "w-[4vw] aspect-square opacity-30",
+                  currentTab == key && "opacity-100"
+                )}
+                style={{
+                  tintColor: "#fff",
+                }}
+              />
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
