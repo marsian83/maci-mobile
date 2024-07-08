@@ -1,8 +1,7 @@
 import { useGlobalContext } from "@/contexts/Global";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import React, { useEffect, useState } from "react";
-import { Button, Text, Vibration, View } from "react-native";
-import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
+import { Text, TouchableHighlight, Vibration, View } from "react-native";
 
 export default function ScannerScreen() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -29,7 +28,7 @@ export default function ScannerScreen() {
           onPress={requestPermission}
           className="bg-blue-700 px-8 py-2 rounded-md"
         >
-          grant permission
+          <Text>grant permission</Text>
         </TouchableHighlight>
       </View>
     );
