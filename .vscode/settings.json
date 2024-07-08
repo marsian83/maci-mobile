@@ -1,15 +1,6 @@
 {
-  "workbench.colorTheme": "Visual Studio Dark",
-  "prisma.showPrismaDataPlatformNotification": false,
+  "workbench.colorTheme": "Tokyo Night Dark",
   "editor.formatOnSave": true,
-  "github.copilot.editor.enableAutoCompletions": true,
-  "dart.flutterSdkPath": "/Users/yashgoyal/flutter",
-  "solidity.telemetry": true,
-  "workbench.iconTheme": "material-icon-theme",
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "[prisma]": {
-    "editor.defaultFormatter": "Prisma.prisma"
-  },
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always"
   },
