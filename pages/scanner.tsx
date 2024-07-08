@@ -29,7 +29,7 @@ export default function ScannerScreen() {
           onPress={requestPermission}
           className="bg-blue-700 px-8 py-2 rounded-md"
         >
-          grant permission
+          <Text>grant permission</Text>
         </TouchableHighlight>
       </View>
     );
