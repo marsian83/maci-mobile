@@ -1,6 +1,7 @@
 import { CameraView, useCameraPermissions } from "expo-camera";
 import React, { useEffect, useState } from "react";
 import { Button, Text, View } from "react-native";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
 export default function ScannerScreen() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -15,14 +16,19 @@ export default function ScannerScreen() {
         <Text style={{ textAlign: "center" }}>
           We need your permission to show the camera
         </Text>
-        <Button onPress={requestPermission} title="grant permission" />
+        <TouchableHighlight
+          onPress={requestPermission}
+          className="bg-blue-700 px-8 py-2 rounded-md"
+        >
+          grant permission
+        </TouchableHighlight>
       </View>
     );
   }
 
   return (
     <View>
-      <CameraView facing={"back"} className=""></CameraView>
+      <CameraView facing={"back"} className="w-full aspect-square"></CameraView>
     </View>
   );
 }
