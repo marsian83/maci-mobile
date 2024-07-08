@@ -1,18 +1,50 @@
-import { useGlobalContext } from "@/contexts/Global";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import React, { useEffect, useState } from "react";
-import { Button, Text, Vibration, View } from "react-native";
-import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
+import { Text, TouchableOpacity, Vibration, View } from "react-native";
+import { TouchableHighlight } from "react-native-gesture-handler";
+import { twMerge } from "tailwind-merge";
 
 export default function ScannerScreen() {
   const [permission, requestPermission] = useCameraPermissions();
 
   const [data, setData] = useState<string | null>(null);
 
-  const [modal, setModal] = useGlobalContext().modalState;
+  const [errored, setErrored] = useState(false);
+  const [errorTimeout, setErrorTimeout] = useState<NodeJS.Timeout>();
+
+  const [id, setId] = useState("");
+
+  async function startVotingSession() {
+    let id = "";
+    if (!data) return setData(null);
+
+    try {
+      const parsedData = JSON.parse(data);
+      id = parsedData.webId;
+      if (!id) throw "Invalid data";
+    } catch (err) {
+      errorTimeout && clearTimeout(errorTimeout);
+      setData(null);
+      setErrored(true);
+      const t = setTimeout(() => {
+        setErrored(false);
+      }, 1500);
+      setErrorTimeout(t);
+    }
+
+    if (!id) return setData(null);
+
+    Vibration.vibrate();
+    setId(id);
+  }
+
+  function disconnect() {
+    setId("");
+    setData(null);
+  }
 
   useEffect(() => {
-    data && setModal(<VoteConfirmationModal id={data} />);
+    data && startVotingSession();
   }, [data]);
 
   if (!permission) {
@@ -37,11 +69,13 @@ export default function ScannerScreen() {
 
   return (
     <View className="flex flex-col">
-      <Text className="text-white mb-4 text-xl font-semibold text-center">
-        Scan QR Code
-      </Text>
+      {!id && (
+        <Text className="text-white mb-4 text-xl font-semibold text-center">
+          Scan QR Code
+        </Text>
+      )}
 
-      {!data && (
+      {!id && (
         <CameraView
           facing={"back"}
           className="w-full aspect-square relative"
@@ -49,35 +83,38 @@ export default function ScannerScreen() {
             barcodeTypes: ["qr"],
           }}
           onBarcodeScanned={(code) => {
-            Vibration.vibrate();
             setData(code.data);
-            console.log(code.data);
           }}
         >
-          <Text className="text-white font-medium mb-2 absolute bottom-0 self-center bg-black px-2 py-1 rounded-sm">
-            Place QR inside the square
+          <Text
+            className={twMerge(
+              "text-white font-medium mb-2 absolute bottom-0 self-center bg-black px-2 py-1 rounded-sm",
+              errored && "text-red-500"
+            )}
+          >
+            {!errored && "Place QR inside the square"}
+            {errored && "Invalid QR"}
           </Text>
         </CameraView>
       )}
+
+      {id && <VotingScreen id={id} disconnect={disconnect} />}
     </View>
   );
 }
 
-function VoteConfirmationModal(props: { id: string }) {
-  const [modal, setModal] = useGlobalContext().modalState;
-
+function VotingScreen(props: { id: string; disconnect: () => void }) {
   return (
-    <View className="p-4 max-w-[80vw] max-h-[60vh]">
-      {/* <View
-        className="self-end text-white"
-        // onPress={() => setModal(false)}
-      >
-        X
-      </View> */}
-
-      <Text className="text-white">
-        Are you sure you want to vote for {props.id}?
+    <View>
+      <Text className="text-xl text-center text-green-400">
+        Connected to #{props.id}
       </Text>
+      <TouchableOpacity
+        className="bg-red-600 px-5 py-1 self-center mt-4 rounded"
+        onPress={props.disconnect}
+      >
+        <Text className="text-white font-medium text-sm">Disconnect</Text>
+      </TouchableOpacity>
     </View>
   );
 }
